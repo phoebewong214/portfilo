@@ -1,49 +1,41 @@
-# Phoebe (Tszching) Wang — Portfolio Site
+# Phoebe (Tszching) Wang — Portfolio
 
-> Personal portfolio built with React + Vite, deployed on GitHub Pages.  
-> **Live →** [phoebewong214.github.io/portflio](https://phoebewong214.github.io/portflio/)
+Personal portfolio site built with React + Vite.
+
+🔗 **Live → [phoebewong214.github.io/portfilo](https://phoebewong214.github.io/portfilo/)**
 
 ---
 
 ## About
 
-This is my personal portfolio site showcasing my experience as a PM, data analyst, and AI builder. It includes an interactive experience timeline, project case studies, and a contact section.
+Product Manager · Data Analyst · AI Builder · Northwestern MSIT '26
 
-**Stack:** React 18 · Vite 5 · Pure CSS-in-JS (no UI framework) · GitHub Actions CI/CD
-
----
-
-## Features
-
-- Horizontal tab-based internship timeline (NetEase · Xiaohongshu · NielsenIQ)
-- Scroll-reveal animations throughout
-- Fully responsive — mobile, tablet, and desktop
-- Resume PDF download
-- Auto-deployed via GitHub Actions on every push to `main`
+Trilingual (English, Mandarin, Cantonese) · Open to Work · New Grad 2026
 
 ---
 
-## Local Development
+## Built With
 
-```bash
-npm install
-npm run dev        # http://localhost:5173
-```
+- **React 18** — component-based UI
+- **Vite** — fast build tooling
+- **CSS-in-JS** — custom dark theme with pink/lavender palette
+- **GitHub Pages** — deployment
 
-## Build & Deploy
+---
 
-Deployment is handled automatically by GitHub Actions (`.github/workflows/deploy.yml`).  
-Any push to `main` triggers a production build and deploys to GitHub Pages.
+## Sections
 
-To build locally:
-```bash
-npm run build      # outputs to /dist
-```
+- Hero — name, status badges, CTA
+- Experience — NetEase · Xiaohongshu · NielsenIQ (horizontal tab timeline)
+- Projects — OmniBank · Fraud Detection · InsurTech · CodeQuest
+- Skills — Product · Data · AI · Languages
+- Education — Northwestern · University of Macau
+- Contact — Email · LinkedIn · GitHub · Phone
 
 ---
 
 ## Contact
 
-- Email: phoebewong214@gmail.com  
-- LinkedIn: [linkedin.com/in/phoebewang003214](https://www.linkedin.com/in/phoebewang003214)  
-- GitHub: [github.com/phoebewong214](https://github.com/phoebewong214)
+📧 phoebewong214@gmail.com  
+🔗 [linkedin.com/in/phoebewang003214](https://www.linkedin.com/in/phoebewang003214)  
+🐙 [github.com/phoebewong214](https://github.com/phoebewong214)
