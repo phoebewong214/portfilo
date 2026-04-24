@@ -1,7 +1,7 @@
 # Phoebe (Tszching) Wang — Portfolio Site
 
 > Personal portfolio built with React + Vite, deployed on GitHub Pages.  
-> **Live →** [phoebewong214.github.io/phoebe-wang-portflio](https://phoebewong214.github.io/phoebe-wang-portflio/)
+> **Live →** [phoebewong214.github.io/portflio](https://phoebewong214.github.io/portflio/)
 
 ---
 
