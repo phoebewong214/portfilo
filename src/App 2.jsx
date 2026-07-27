@@ -90,7 +90,6 @@ const G = () => (
       .proj-card,.edu-card{padding:1.7rem 1.4rem!important}
       .proj-title{font-size:1.02rem!important}
       .proj-desc{font-size:.86rem!important}
-      .proj-link{font-size:.64rem!important;padding:.42rem .8rem!important}
       .sk-card{padding:1.5rem 1.4rem!important}
       .sk-tag{font-size:.78rem!important;padding:.32rem .8rem!important}
 
@@ -147,43 +146,11 @@ const EXP = [
   },
 ];
 
-// links: [{label, href}] — 有 live 的放前面，没链接的留空数组
 const PROJECTS = [
-  {
-    type:"Sports Tech · AI Product · Shipped",
-    title:"RallyPoint — AI Partner Matching",
-    desc:"A live product that matches tennis and pickleball players on skill (NTRP/DUPR), weekly schedule overlap, court proximity, and a semantic playing-style signal from bio embeddings. Every match explains itself with reason chips — I chose transparency over a black-box score so players trust the suggestion enough to actually message someone. Shipped end to end: React 19 + TypeScript front end, Flask + PostgreSQL API, cookie-based auth, running in production.",
-    tags:["React + TypeScript","Flask","PostgreSQL","Embeddings","Explainable Matching"],
-    links:[
-      {label:"Live Site",href:"https://app.tryrallypoint.com"},
-      {label:"GitHub",href:"https://github.com/phoebewong214/rallypoint"},
-    ],
-  },
-  {
-    type:"FinTech · ML + Product",
-    title:"OmniBank Fraud & Risk Intelligence",
-    desc:"An end-to-end fraud risk system for small-business finance teams: a Python pipeline scores transactions, exports them as JSON, and a React dashboard surfaces them for review. The interesting problem was measurement, not modeling — with fraud at well under 1% of volume, accuracy is meaningless, so I evaluated on PR-AUC and precision-at-threshold and made the precision/recall tradeoff an explicit, tunable product decision instead of a hidden default.",
-    tags:["Python","Scikit-learn","Imbalanced Data","React Dashboard","Risk Thresholds"],
-    links:[
-      {label:"GitHub",href:"https://github.com/phoebewong214/omnibank-agentic-platform"},
-    ],
-  },
-  {
-    type:"InsurTech · Full-Stack Build",
-    title:"Cross-Border Auto Insurance Platform",
-    desc:"Built a full-stack platform (PHP + MySQL) digitalizing Guangdong–Hong Kong–Macau cross-border car insurance, targeting a drop from a 7–10 day paper process to 1–2 days. Connected car owners, insurers, and regulators in one workflow with real-time application tracking — replacing the repeated manual data entry and total lack of status visibility that made the original process so painful. Undergraduate capstone, University of Macau.",
-    tags:["PHP","MySQL","Workflow Design","Systems Integration","UX Research"],
-    links:[
-      {label:"GitHub",href:"https://github.com/phoebewong214/cross-border-insurance-platform"},
-    ],
-  },
-  {
-    type:"Risk Analytics · Data Mining",
-    title:"Wire Transfer Fraud Detection",
-    desc:"Applied CRISP-DM methodology to detect fraudulent wire transfers in R. Built and tuned logistic regression, decision trees, random forests, and neural networks — evaluated with AUC-ROC, F1-score, and recall to surface fraud patterns and inform risk control strategy.",
-    tags:["R","Neural Networks","CRISP-DM","AUC-ROC"],
-    links:[],
-  },
+  {type:"FinTech · AI Product",title:"OmniBank Agentic Fraud Risk Platform",desc:"Designed an AI-driven agentic platform for small businesses to detect fraud and streamline financial ops. Built a Fraud Risk Agent using Logistic Regression and Random Forest (Python: Pandas, NumPy, Scikit-learn), balancing explainability with predictive performance for real-world financial decisions.",tags:["Python","Scikit-learn","ML Modeling","Product Architecture"]},
+  {type:"Risk Analytics · Data Mining",title:"Wire Transfer Fraud Detection",desc:"Applied CRISP-DM methodology to detect fraudulent wire transfers using R. Built and tuned logistic regression, decision trees, random forests, and neural networks — evaluated with AUC-ROC, F1-score, and recall to surface fraud patterns and inform risk control strategy.",tags:["R","Neural Networks","CRISP-DM","AUC-ROC"]},
+  {type:"InsurTech · UX Design",title:"Cross-Border Auto Insurance Platform",desc:"Designed a one-stop HK–Macau cross-border insurance platform from registration to policy management. Prototyped modularized workflows in Figma projected to cut processing time by 70%, with AI-powered underwriting and document recognition.",tags:["Figma","UX Research","AI Underwriting","Competitive Analysis"]},
+  {type:"EdTech · Product Design",title:"CodeQuest: Gamified Coding Platform",desc:"Developed a gamified programming app for teens (13–18) using game mechanics to boost engagement. Led UX research applying Norman's design principles, delivering 10+ high-fidelity interfaces that improved task clarity and navigation efficiency.",tags:["Figma","UX Research","Gamification","User Testing"]},
 ];
 
 const SKILLS = [
@@ -470,11 +437,6 @@ function ProjectsSection(){
                 <p style={{fontSize:".62rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--lv)",marginBottom:".75rem",fontWeight:600}}>{p.type}</p>
                 <h3 className="proj-title" style={{fontFamily:"var(--syne)",fontSize:"1.05rem",fontWeight:700,lineHeight:1.32,marginBottom:".9rem"}}>{p.title}</h3>
                 <p className="proj-desc" style={{fontSize:".87rem",color:"var(--w2)",lineHeight:1.78,flex:1,fontWeight:300,marginBottom:"1.2rem"}}>{p.desc}</p>
-                {p.links?.length>0&&(
-                  <div className="proj-links" style={{display:"flex",flexWrap:"wrap",gap:".5rem",marginBottom:"1.1rem"}}>
-                    {p.links.map((l,li)=><ProjLink key={l.href} {...l} primary={li===0}/>)}
-                  </div>
-                )}
                 <div style={{display:"flex",flexWrap:"wrap",gap:".4rem"}}>
                   {p.tags.map(t=>(
                     <span key={t} style={{fontSize:".6rem",letterSpacing:".07em",textTransform:"uppercase",padding:".2rem .62rem",borderRadius:5,background:"rgba(232,99,154,.08)",border:"1px solid rgba(232,99,154,.22)",color:"hsl(330,82%,76%)",fontWeight:600}}>{t}</span>
@@ -486,27 +448,6 @@ function ProjectsSection(){
         </div>
       </div>
     </section>
-  );
-}
-
-// 项目卡片上的链接。第一个（通常是 live 站点）用实心样式，突出"可以点开看"
-function ProjLink({label,href,primary=false}){
-  const[h,sh]=useState(false);
-  return(
-    <a href={href} target="_blank" rel="noreferrer" className="proj-link"
-      style={{
-        display:"inline-flex",alignItems:"center",gap:".35rem",
-        fontSize:".68rem",letterSpacing:".08em",textTransform:"uppercase",fontWeight:600,
-        padding:".38rem .85rem",borderRadius:999,textDecoration:"none",transition:"all .22s",
-        background:primary?(h?"var(--pk)":"rgba(232,99,154,.16)"):(h?"rgba(255,255,255,.1)":"rgba(255,255,255,.05)"),
-        border:`1px solid ${primary?"rgba(232,99,154,.42)":"rgba(255,255,255,.14)"}`,
-        color:primary?(h?"#fff":"var(--pkl)"):"var(--w2)",
-        transform:h?"translateY(-1px)":"translateY(0)",
-      }}
-      onMouseEnter={()=>sh(true)} onMouseLeave={()=>sh(false)}
-    >
-      {label}<span aria-hidden="true" style={{fontSize:".8em",opacity:.8}}>↗</span>
-    </a>
   );
 }
 
