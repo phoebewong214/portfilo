@@ -1,0 +1,105 @@
+<!doctype html>
+<!--
+  分享卡片（public/og.jpg）的来源模板。改完文案后重新生成：
+
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+      --headless --disable-gpu --hide-scrollbars \
+      --window-size=1200,630 --virtual-time-budget=6000 \
+      --screenshot=/tmp/og-raw.png \
+      "file://$PWD/tools/og-template.html"
+
+    python3 -c "from PIL import Image; Image.open('/tmp/og-raw.png').convert('RGB').save('public/og.jpg','JPEG',quality=90,optimize=True,progressive=True)"
+
+  尺寸固定 1200×630（Open Graph 标准比例，LinkedIn / Slack / Twitter 通用）。
+  --virtual-time-budget 是为了等 Google Fonts 下载完，去掉会渲染成系统默认字体。
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        width: 1200px; height: 630px; overflow: hidden;
+        background:
+          radial-gradient(ellipse at 22% 34%, rgba(80,45,130,.55) 0%, transparent 58%),
+          radial-gradient(ellipse at 82% 74%, rgba(150,55,100,.45) 0%, transparent 55%),
+          #07060f;
+        font-family: 'DM Sans', sans-serif;
+        color: #f5f5f5;
+        position: relative;
+        display: flex; flex-direction: column; justify-content: center;
+        padding: 0 86px;
+      }
+      .grid {
+        position: absolute; inset: 0;
+        background-image:
+          linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+        background-size: 72px 72px;
+        -webkit-mask-image: radial-gradient(ellipse at center, black 25%, transparent 78%);
+      }
+      .inner { position: relative; z-index: 1; }
+
+      .pills { display: flex; gap: 12px; margin-bottom: 30px; }
+      .pill {
+        display: inline-flex; align-items: center; gap: 9px;
+        padding: 9px 20px; border-radius: 999px;
+        font-size: 15px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600;
+      }
+      .pill-green { border: 1px solid rgba(74,222,128,.32); background: rgba(74,222,128,.1); color: hsl(142,72%,72%); }
+      .pill-pink  { border: 1px solid rgba(232,99,154,.34); background: rgba(232,99,154,.1); color: hsl(330,82%,78%); }
+      .dot { width: 9px; height: 9px; border-radius: 50%; background: hsl(142,72%,55%); }
+
+      h1 {
+        font-family: 'Syne', sans-serif; font-weight: 800;
+        font-size: 104px; line-height: .94; letter-spacing: -.03em;
+        margin-bottom: 26px;
+      }
+      h1 .b { color: #fff; }
+      h1 .p { color: hsl(330,82%,78%); }
+
+      .tag {
+        font-size: 27px; font-weight: 300; line-height: 1.5;
+        color: rgba(255,255,255,.68); max-width: 830px; margin-bottom: 34px;
+      }
+
+      .foot {
+        display: flex; align-items: center; gap: 18px;
+        font-size: 17px; letter-spacing: .17em; text-transform: uppercase;
+        font-weight: 500; color: rgba(255,255,255,.56);
+      }
+      .sep { width: 5px; height: 5px; border-radius: 50%; background: hsl(330,82%,62%); }
+
+      .mark {
+        position: absolute; top: 54px; right: 86px; z-index: 1;
+        font-family: 'Syne', sans-serif; font-weight: 800; font-size: 34px;
+        letter-spacing: .1em; color: hsl(330,82%,78%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid"></div>
+    <div class="mark">PW</div>
+    <div class="inner">
+      <div class="pills">
+        <span class="pill pill-green"><span class="dot"></span>Open to Work</span>
+        <span class="pill pill-pink">✦ New Grad · 2026</span>
+      </div>
+      <h1><span class="b">Tszching</span> <span class="p">(Phoebe) Wang.</span></h1>
+      <p class="tag">Building AI-powered products that turn data into decisions people actually adopt.</p>
+      <div class="foot">
+        <span>Product · Data · AI</span>
+        <span class="sep"></span>
+        <span>Northwestern MSIT '26</span>
+        <span class="sep"></span>
+        <span>Chicago, IL</span>
+      </div>
+    </div>
+  </body>
+</html>
