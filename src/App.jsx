@@ -796,6 +796,14 @@ function EducationSection(){
 }
 
 /* ─── CONTACT ────────────────────────────────────────────────────────────── */
+// 手机号不以完整字符串出现在源码/构建产物里，抓取页面 HTML 的爬虫拿不到；
+// 浏览器里正常显示、正常点击拨号。对真人零影响，只挡掉最省事的那类采集。
+function revealPhone(){
+  const parts=["+1 ","(312) ","358","-","8059"];
+  const val=parts.join("");
+  return{val,href:"tel:+1"+val.replace(/\D/g,"").slice(-10)};
+}
+
 function ContactSection(){
   return(
     <section id="contact" className="sec" style={{padding:"7rem 0",background:"var(--bg)",position:"relative",overflow:"hidden"}}>
@@ -817,7 +825,7 @@ function ContactSection(){
                 {icon:"✉",label:"Email",val:"phoebewong214@gmail.com",href:"mailto:phoebewong214@gmail.com"},
                 {icon:"in",label:"LinkedIn",val:"linkedin.com/in/phoebewang003214",href:"https://www.linkedin.com/in/phoebewang003214"},
                 {icon:"GH",label:"GitHub",val:"github.com/phoebewang214",href:"https://github.com/phoebewang214"},
-                {icon:"☏",label:"Phone",val:"+1 (312) 358-8059",href:"tel:+13123588059"},
+                {icon:"☏",label:"Phone",...revealPhone()},
               ].map(c=><ContactRow key={c.label} {...c}/>)}
 
               <div className="ct-buttons" style={{display:"flex",gap:".75rem",marginTop:".4rem"}}>
