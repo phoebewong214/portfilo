@@ -6,29 +6,121 @@ const CV_URL = `${import.meta.env.BASE_URL}Phoebe_CV_Eng__version.pdf`;
 /* ─── GLOBAL STYLES ─────────────────────────────────────────────────────── */
 const G = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&display=swap');
+    /* 字体在 index.html 里用 <link> 加载，不在这里 @import——
+       @import 要等这段 JS 注入的 <style> 生效后才开始下载，会拖慢首屏文字显示 */
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    /* ── 字体（两个主题共用）── */
     :root{
-      --bg:#07060f;
-      --bg2:#0d0b19;
-      --card:rgba(255,255,255,0.04);
-      --border:rgba(255,255,255,0.09);
-      --bh:rgba(232,99,154,0.38);
-      --pk:hsl(330,82%,62%);
-      --pkl:hsl(330,82%,78%);
-      --pks:rgba(232,99,154,0.1);
-      --pu:hsl(272,52%,54%);
-      --lv:hsl(272,68%,80%);
-      --green:hsl(142,72%,55%);
-      --w:hsl(0,0%,96%);
-      --w2:hsl(0,0%,72%);
-      --m:hsl(0,0%,55%);
       --syne:'Syne',sans-serif;
       --dm:'DM Sans',sans-serif;
     }
+
+    /* ── 深色主题（默认）──
+       语义化命名：surface=面、line=描边、w/w2/m=文字三级、pk=粉、lv=紫、green=在职状态
+       浅色主题只需覆盖同名变量，不用碰任何组件代码 */
+    :root,:root[data-theme="dark"]{
+      --bg:#07060f;
+      --bg2:#0d0b19;
+
+      --card:rgba(255,255,255,.04);
+      --surface:rgba(255,255,255,.05);
+      --surface-hover:rgba(255,255,255,.09);
+
+      --line:rgba(255,255,255,.09);
+      --line-strong:rgba(255,255,255,.15);
+      --line-strongest:rgba(255,255,255,.22);
+
+      --w:hsl(0,0%,96%);
+      --w2:hsl(0,0%,72%);
+      --m:hsl(0,0%,55%);
+      --tagline:rgba(255,255,255,.62);
+
+      --nav-bg:rgba(7,6,15,.94);
+      --grid:rgba(255,255,255,.018);
+      --hero-g1:rgba(80,45,130,.35);
+      --hero-g2:rgba(150,55,100,.28);
+
+      --pk:hsl(330,82%,62%);          /* 实心填充 */
+      --pkl:hsl(330,82%,78%);         /* 粉色文字 */
+      --pk-tag:hsl(330,82%,76%);
+      --on-pk:#fff;                   /* 压在粉色填充上的文字 */
+      --name:#fff;
+
+      --pk-bg-subtle:rgba(232,99,154,.08);
+      --pk-bg:rgba(232,99,154,.14);
+      --pk-bg-strong:rgba(232,99,154,.2);
+      --pk-line-subtle:rgba(232,99,154,.24);
+      --pk-line:rgba(232,99,154,.3);
+      --pk-line-strong:rgba(232,99,154,.44);
+      --pk-divider:rgba(232,99,154,.36);
+
+      --lv:hsl(272,68%,80%);
+      --lv-bg:rgba(155,111,212,.12);
+      --lv-line:rgba(155,111,212,.26);
+
+      --green:hsl(142,72%,55%);
+      --green-t:hsl(142,72%,72%);
+      --green-bg:rgba(74,222,128,.08);
+      --green-line:rgba(74,222,128,.28);
+
+      --shadow:none;
+      color-scheme:dark;
+    }
+
+    /* ── 浅色主题 ──
+       粉色在白底上必须压暗，否则正文对比度不达标 */
+    :root[data-theme="light"]{
+      --bg:hsl(280,36%,99%);
+      --bg2:hsl(276,34%,96.5%);
+
+      --card:rgba(255,255,255,.8);
+      --surface:rgba(58,30,88,.045);
+      --surface-hover:rgba(58,30,88,.085);
+
+      --line:rgba(45,25,70,.12);
+      --line-strong:rgba(45,25,70,.18);
+      --line-strongest:rgba(45,25,70,.26);
+
+      --w:hsl(270,28%,13%);
+      --w2:hsl(270,13%,33%);
+      --m:hsl(270,9%,46%);
+      --tagline:hsl(270,13%,33%);
+
+      --nav-bg:rgba(252,251,254,.92);
+      --grid:rgba(58,30,88,.04);
+      --hero-g1:rgba(150,110,220,.2);
+      --hero-g2:rgba(232,120,170,.18);
+
+      --pk:hsl(330,74%,47%);
+      --pkl:hsl(330,70%,40%);
+      --pk-tag:hsl(330,66%,38%);
+      --on-pk:#fff;
+      --name:hsl(270,28%,13%);
+
+      --pk-bg-subtle:rgba(200,40,120,.07);
+      --pk-bg:rgba(200,40,120,.12);
+      --pk-bg-strong:rgba(200,40,120,.18);
+      --pk-line-subtle:rgba(200,40,120,.24);
+      --pk-line:rgba(200,40,120,.32);
+      --pk-line-strong:rgba(200,40,120,.5);
+      --pk-divider:rgba(200,40,120,.4);
+
+      --lv:hsl(272,48%,40%);
+      --lv-bg:rgba(120,70,190,.1);
+      --lv-line:rgba(120,70,190,.28);
+
+      --green:hsl(142,62%,36%);
+      --green-t:hsl(142,60%,28%);
+      --green-bg:rgba(30,150,85,.1);
+      --green-line:rgba(30,150,85,.3);
+
+      --shadow:0 1px 2px rgba(45,25,70,.04),0 8px 24px -12px rgba(45,25,70,.12);
+      color-scheme:light;
+    }
+
     html{scroll-behavior:smooth}
-    body{font-family:var(--dm);background:var(--bg);color:var(--w);overflow-x:hidden;line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-    ::selection{background:rgba(232,99,154,0.3)}
+    body{font-family:var(--dm);background:var(--bg);color:var(--w);overflow-x:hidden;line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transition:background .3s ease,color .3s ease}
+    ::selection{background:var(--pk-bg-strong)}
     @keyframes f1{0%,100%{transform:translate(0,0)}50%{transform:translate(28px,-22px)}}
     @keyframes f2{0%,100%{transform:translate(0,0)}50%{transform:translate(-22px,32px)}}
     @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
@@ -37,7 +129,7 @@ const G = () => (
     @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
     ::-webkit-scrollbar{width:4px}
     ::-webkit-scrollbar-track{background:var(--bg)}
-    ::-webkit-scrollbar-thumb{background:rgba(232,99,154,0.4);border-radius:2px}
+    ::-webkit-scrollbar-thumb{background:var(--pk-line-strong);border-radius:2px}
 
     /* Tab scrollbar hide */
     .tab-scroll{scrollbar-width:none;-ms-overflow-style:none}
@@ -57,10 +149,13 @@ const G = () => (
       body{font-size:15px}
       .nav-bar{padding:.85rem 1.2rem!important}
       .nav-links{display:none!important}
-      .nav-resume{font-size:.6rem!important;padding:.4rem .9rem!important}
+      .nav-resume{display:none!important}   /* CV 入口移到汉堡菜单里，避免顶栏挤 */
+      .nav-burger{display:inline-flex!important}
+      .nav-sheet{display:flex!important}
       .si{padding:0 1.3rem!important}
 
       .hero-section{padding:7rem 1.3rem 5rem!important;min-height:auto!important}
+      .hero-avatar{width:96px!important;height:96px!important}
       .hero-pill{font-size:.55rem!important;padding:.32rem .85rem!important;letter-spacing:.14em!important}
       .hero-name{font-size:clamp(3.2rem,16vw,4.6rem)!important;line-height:.92!important}
       .hero-fullname{font-size:.6rem!important;letter-spacing:.13em!important;margin-bottom:1.2rem!important}
@@ -217,6 +312,31 @@ function useIsMobile(){
   },[]);
   return m;
 }
+// 初始主题由 index.html 里的内联脚本决定（localStorage → 系统偏好），
+// 那段脚本在 React 挂载前就跑完了，避免首屏闪一下白/黑。
+function useTheme(){
+  const[theme,setTheme]=useState(()=>document.documentElement.getAttribute("data-theme")||"dark");
+  useEffect(()=>{
+    document.documentElement.setAttribute("data-theme",theme);
+    try{localStorage.setItem("pw-theme",theme);}catch{/* 无痕模式下忽略 */}
+  },[theme]);
+  // 用户没手动选过时，跟随系统切换
+  useEffect(()=>{
+    const mq=window.matchMedia("(prefers-color-scheme: light)");
+    const onChange=e=>{
+      let stored=null;
+      try{stored=localStorage.getItem("pw-theme-manual");}catch{}
+      if(!stored)setTheme(e.matches?"light":"dark");
+    };
+    mq.addEventListener("change",onChange);
+    return()=>mq.removeEventListener("change",onChange);
+  },[]);
+  const toggle=useCallback(()=>{
+    try{localStorage.setItem("pw-theme-manual","1");}catch{}
+    setTheme(t=>t==="dark"?"light":"dark");
+  },[]);
+  return[theme,toggle];
+}
 
 /* ─── PRIMITIVES ─────────────────────────────────────────────────────────── */
 function Reveal({children,delay=0,style={}}){
@@ -242,7 +362,7 @@ function Card({children,style={},hover=true,className=""}){
   return(
     <div
       className={className}
-      style={{background:"var(--card)",border:`1px solid ${h&&hover?"var(--bh)":"var(--border)"}`,borderRadius:20,backdropFilter:"blur(18px)",transition:"border-color .3s",...style}}
+      style={{background:"var(--card)",border:`1px solid ${h&&hover?"var(--pk-line-strong)":"var(--line)"}`,borderRadius:20,backdropFilter:"blur(18px)",boxShadow:"var(--shadow)",transition:"border-color .3s,box-shadow .3s",...style}}
       onMouseEnter={()=>hover&&sh(true)} onMouseLeave={()=>sh(false)}
     >{children}</div>
   );
@@ -258,9 +378,9 @@ function Btn({href,download,children,variant="ghost",style={},className=""}){
     fontFamily:"var(--dm)",border:"none",whiteSpace:"nowrap",
   };
   const variants={
-    primary:{...base,background:"var(--pk)",color:"#fff",transform:h?"translateY(-2px)":"translateY(0)"},
-    ghost:{...base,border:"1px solid rgba(255,255,255,.2)",background:h?"rgba(255,255,255,.08)":"rgba(255,255,255,.04)",color:"var(--w)"},
-    outline:{...base,border:"1px solid rgba(232,99,154,.45)",background:h?"rgba(232,99,154,.12)":"transparent",color:"var(--w)"},
+    primary:{...base,background:"var(--pk)",color:"var(--on-pk)",transform:h?"translateY(-2px)":"translateY(0)"},
+    ghost:{...base,border:"1px solid var(--line-strongest)",background:h?"var(--surface-hover)":"var(--card)",color:"var(--w)"},
+    outline:{...base,border:"1px solid var(--pk-line-strong)",background:h?"var(--pk-bg)":"transparent",color:"var(--w)"},
   };
   return(
     <a href={href} download={download} target={href?.startsWith("http")?"_blank":undefined} rel="noreferrer"
@@ -279,34 +399,127 @@ function renderBullet(parts){
 }
 
 /* ─── NAV ────────────────────────────────────────────────────────────────── */
-function Nav(){
+const NAV_LINKS=["Experience","Projects","Skills","Education","Contact"];
+
+// 图标用内联 SVG，不引第三方图标库（避免额外请求，且能跟随 currentColor 变主题）
+const IconSun=()=>(
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/>
+  </svg>
+);
+const IconMoon=()=>(
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M20 14.2A8.2 8.2 0 1 1 9.8 4a6.6 6.6 0 0 0 10.2 10.2z"/>
+  </svg>
+);
+
+function ThemeToggle({theme,toggle,className=""}){
+  const[h,sh]=useState(false);
+  const next=theme==="dark"?"light":"dark";
+  return(
+    <button type="button" onClick={toggle} className={className}
+      aria-label={`Switch to ${next} mode`} title={`Switch to ${next} mode`}
+      style={{
+        display:"inline-flex",alignItems:"center",justifyContent:"center",
+        width:34,height:34,borderRadius:999,cursor:"pointer",flexShrink:0,
+        background:h?"var(--surface-hover)":"var(--surface)",
+        border:"1px solid var(--line-strong)",color:"var(--w2)",
+        transition:"all .22s",
+      }}
+      onMouseEnter={()=>sh(true)} onMouseLeave={()=>sh(false)}
+    >{theme==="dark"?<IconSun/>:<IconMoon/>}</button>
+  );
+}
+
+function Nav({theme,toggle}){
   const scrolled=useScrolled();
   const[aid,said]=useState("");
+  const[open,setOpen]=useState(false);
   useEffect(()=>{
-    const ids=["experience","projects","skills","education","contact"];
+    const ids=NAV_LINKS.map(l=>l.toLowerCase());
     const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)said(e.target.id);}),{rootMargin:"-40% 0px -55% 0px"});
     ids.forEach(id=>{const el=document.getElementById(id);if(el)o.observe(el);});
     return()=>o.disconnect();
   },[]);
+  // 菜单展开时锁滚动，并支持 Esc 关闭
+  useEffect(()=>{
+    document.body.style.overflow=open?"hidden":"";
+    const onKey=e=>{if(e.key==="Escape")setOpen(false);};
+    window.addEventListener("keydown",onKey);
+    return()=>{document.body.style.overflow="";window.removeEventListener("keydown",onKey);};
+  },[open]);
+
   return(
-    <nav className="nav-bar" style={{position:"fixed",top:0,left:0,right:0,zIndex:100,padding:"1.05rem 3rem",display:"flex",alignItems:"center",justifyContent:"space-between",background:scrolled?"rgba(7,6,15,.94)":"transparent",backdropFilter:scrolled?"blur(28px)":"none",borderBottom:`1px solid ${scrolled?"rgba(255,255,255,.07)":"transparent"}`,transition:"all .4s cubic-bezier(.4,0,.2,1)"}}>
-      <a href="#" style={{fontFamily:"var(--syne)",fontWeight:800,fontSize:".95rem",color:"var(--pkl)",textDecoration:"none",letterSpacing:".08em"}}>PW</a>
-      <ul className="nav-links" style={{display:"flex",gap:"2rem",listStyle:"none"}}>
-        {["Experience","Projects","Skills","Education","Contact"].map(l=>{
-          const id=l.toLowerCase(),isA=aid===id;
-          return(
-            <li key={l}>
-              <a href={`#${id}`} style={{fontSize:".7rem",letterSpacing:".12em",textTransform:"uppercase",fontWeight:500,textDecoration:"none",color:isA?"var(--w)":"var(--w2)",borderBottom:`1px solid ${isA?"var(--pk)":"transparent"}`,paddingBottom:"3px",transition:"all .2s"}}>{l}</a>
-            </li>
-          );
-        })}
-      </ul>
-      <Btn href={CV_URL} download variant="outline" className="nav-resume" style={{fontSize:".66rem",padding:".46rem 1.1rem"}}>↓ Resume</Btn>
-    </nav>
+    <>
+      <nav className="nav-bar" style={{position:"fixed",top:0,left:0,right:0,zIndex:100,padding:"1.05rem 3rem",display:"flex",alignItems:"center",justifyContent:"space-between",background:scrolled||open?"var(--nav-bg)":"transparent",backdropFilter:scrolled||open?"blur(28px)":"none",borderBottom:`1px solid ${scrolled&&!open?"var(--line)":"transparent"}`,transition:"all .4s cubic-bezier(.4,0,.2,1)"}}>
+        <a href="#" style={{fontFamily:"var(--syne)",fontWeight:800,fontSize:".95rem",color:"var(--pkl)",textDecoration:"none",letterSpacing:".08em"}}>PW</a>
+        <ul className="nav-links" style={{display:"flex",gap:"2rem",listStyle:"none"}}>
+          {NAV_LINKS.map(l=>{
+            const id=l.toLowerCase(),isA=aid===id;
+            return(
+              <li key={l}>
+                <a href={`#${id}`} aria-current={isA?"true":undefined} style={{fontSize:".7rem",letterSpacing:".12em",textTransform:"uppercase",fontWeight:500,textDecoration:"none",color:isA?"var(--w)":"var(--w2)",borderBottom:`1px solid ${isA?"var(--pk)":"transparent"}`,paddingBottom:"3px",transition:"all .2s"}}>{l}</a>
+              </li>
+            );
+          })}
+        </ul>
+        <div style={{display:"flex",alignItems:"center",gap:".6rem"}}>
+          <ThemeToggle theme={theme} toggle={toggle}/>
+          <Btn href={CV_URL} download variant="outline" className="nav-resume" style={{fontSize:".66rem",padding:".46rem 1.1rem"}}>↓ Resume</Btn>
+          {/* 汉堡按钮：之前手机端导航是直接 display:none 隐藏的，等于没有导航 */}
+          <button type="button" className="nav-burger" onClick={()=>setOpen(o=>!o)}
+            aria-label={open?"Close menu":"Open menu"} aria-expanded={open}
+            style={{display:"none",alignItems:"center",justifyContent:"center",width:34,height:34,borderRadius:10,cursor:"pointer",background:"var(--surface)",border:"1px solid var(--line-strong)",color:"var(--w)",flexShrink:0}}>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              {open?<path d="M6 6l12 12M18 6L6 18"/>:<path d="M3.5 7h17M3.5 12h17M3.5 17h17"/>}
+            </svg>
+          </button>
+        </div>
+      </nav>
+
+      {/* 手机端全屏菜单 */}
+      <div className="nav-sheet" onClick={()=>setOpen(false)}
+        style={{
+          position:"fixed",inset:0,zIndex:99,display:"none",
+          flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"1.6rem",
+          background:"var(--nav-bg)",backdropFilter:"blur(28px)",
+          opacity:open?1:0,pointerEvents:open?"auto":"none",transition:"opacity .28s ease",
+        }}>
+        {NAV_LINKS.map(l=>(
+          <a key={l} href={`#${l.toLowerCase()}`} onClick={()=>setOpen(false)}
+            style={{fontFamily:"var(--syne)",fontSize:"1.5rem",fontWeight:700,textDecoration:"none",color:aid===l.toLowerCase()?"var(--pkl)":"var(--w)",letterSpacing:"-.01em"}}>{l}</a>
+        ))}
+        <Btn href={CV_URL} download variant="outline" style={{marginTop:".6rem"}}>↓ Download CV</Btn>
+      </div>
+    </>
   );
 }
 
 /* ─── HERO ───────────────────────────────────────────────────────────────── */
+// 照片放在 public/ 下即可，改这一行的文件名。
+// 文件不存在时 onError 会回退到 "PW" 字母版，页面不会出现裂图。
+const PHOTO_URL=`${import.meta.env.BASE_URL}photo.jpg`;
+
+function Avatar(){
+  const[failed,setFailed]=useState(false);
+  const ring={
+    width:132,height:132,borderRadius:"50%",
+    padding:3,background:"linear-gradient(140deg,var(--pk),var(--lv))",
+    boxShadow:"0 10px 34px -14px var(--pk-line-strong)",
+  };
+  const inner={
+    width:"100%",height:"100%",borderRadius:"50%",objectFit:"cover",display:"block",
+    background:"var(--bg2)",
+  };
+  return(
+    <div className="hero-avatar" style={ring}>
+      {failed
+        ? <div style={{...inner,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"var(--syne)",fontWeight:800,fontSize:"2.4rem",letterSpacing:".04em",color:"var(--pkl)"}}>PW</div>
+        : <img src={PHOTO_URL} alt="Tszching (Phoebe) Wang" width={126} height={126} style={inner} onError={()=>setFailed(true)}/>}
+    </div>
+  );
+}
+
 function Hero(){
   const[m,sm]=useState(false);
   useEffect(()=>{const t=setTimeout(()=>sm(true),80);return()=>clearTimeout(t);},[]);
@@ -315,31 +528,36 @@ function Hero(){
   return(
     <section className="hero-section" style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"8rem 2rem 6rem",position:"relative",overflow:"hidden",textAlign:"center"}}>
       {/* Layered background — flat gradient, no glow orbs */}
-      <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 25% 40%,rgba(80,45,130,.35) 0%,transparent 55%),radial-gradient(ellipse at 75% 60%,rgba(150,55,100,.28) 0%,transparent 50%),var(--bg)"}}/>
-      <div style={{position:"absolute",inset:0,backgroundImage:"linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px)",backgroundSize:"80px 80px",maskImage:"radial-gradient(ellipse at center,black 30%,transparent 80%)",WebkitMaskImage:"radial-gradient(ellipse at center,black 30%,transparent 80%)"}}/>
+      <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 25% 40%,var(--hero-g1) 0%,transparent 55%),radial-gradient(ellipse at 75% 60%,var(--hero-g2) 0%,transparent 50%),var(--bg)"}}/>
+      <div style={{position:"absolute",inset:0,backgroundImage:"linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px)",backgroundSize:"80px 80px",maskImage:"radial-gradient(ellipse at center,black 30%,transparent 80%)",WebkitMaskImage:"radial-gradient(ellipse at center,black 30%,transparent 80%)"}}/>
 
       <div style={{position:"relative",zIndex:1,maxWidth:880,width:"100%"}}>
 
+        {/* ── 头像 ── */}
+        <div style={{...f(0),display:"flex",justifyContent:"center",marginBottom:"1.6rem"}}>
+          <Avatar/>
+        </div>
+
         {/* ── BADGES ROW ── */}
-        <div className="hero-tags" style={{...f(0),display:"flex",alignItems:"center",justifyContent:"center",gap:".7rem",flexWrap:"wrap",marginBottom:"1.8rem"}}>
+        <div className="hero-tags" style={{...f(.06),display:"flex",alignItems:"center",justifyContent:"center",gap:".7rem",flexWrap:"wrap",marginBottom:"1.8rem"}}>
           {/* Open to Work */}
-          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid rgba(74,222,128,.28)",background:"rgba(74,222,128,.08)",backdropFilter:"blur(10px)",fontSize:".64rem",letterSpacing:".15em",textTransform:"uppercase",color:"hsl(142,72%,72%)",fontWeight:600}}>
-            <span style={{width:7,height:7,borderRadius:"50%",background:"hsl(142,72%,55%)",display:"inline-block",animation:"pulseDot 2s ease-in-out infinite"}}/>
+          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid var(--green-line)",background:"var(--green-bg)",backdropFilter:"blur(10px)",fontSize:".64rem",letterSpacing:".15em",textTransform:"uppercase",color:"var(--green-t)",fontWeight:600}}>
+            <span style={{width:7,height:7,borderRadius:"50%",background:"var(--green)",display:"inline-block",animation:"pulseDot 2s ease-in-out infinite"}}/>
             Open to Work
           </div>
           {/* New Grad */}
-          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid rgba(232,99,154,.3)",background:"rgba(232,99,154,.08)",backdropFilter:"blur(10px)",fontSize:".64rem",letterSpacing:".15em",textTransform:"uppercase",color:"var(--pkl)",fontWeight:600}}>
+          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid var(--pk-line)",background:"var(--pk-bg-subtle)",backdropFilter:"blur(10px)",fontSize:".64rem",letterSpacing:".15em",textTransform:"uppercase",color:"var(--pkl)",fontWeight:600}}>
             ✦ New Grad · 2026
           </div>
           {/* Role */}
-          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid rgba(255,255,255,.15)",background:"rgba(255,255,255,.05)",backdropFilter:"blur(10px)",fontSize:".62rem",letterSpacing:".15em",textTransform:"uppercase",color:"var(--w2)"}}>
+          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid var(--line-strong)",background:"var(--surface)",backdropFilter:"blur(10px)",fontSize:".62rem",letterSpacing:".15em",textTransform:"uppercase",color:"var(--w2)"}}>
             PM · Data · AI
           </div>
         </div>
 
         {/* Name */}
         <h1 className="hero-name" style={{...f(.1),fontFamily:"var(--syne)",fontSize:"clamp(3.6rem,11vw,9.5rem)",fontWeight:800,lineHeight:.92,letterSpacing:"-.03em",marginBottom:".6rem"}}>
-          <span style={{color:"#fff"}}>Tszching</span><br/>
+          <span style={{color:"var(--name)"}}>Tszching</span><br/>
           <span style={{color:"var(--pkl)"}}>(Phoebe) Wang.</span>
         </h1>
 
@@ -348,7 +566,7 @@ function Hero(){
         </p>
 
         {/* Tagline */}
-        <p className="hero-tagline" style={{...f(.28),fontSize:"1.1rem",color:"rgba(255,255,255,.62)",fontWeight:300,maxWidth:520,margin:"0 auto 2.6rem",lineHeight:1.85}}>
+        <p className="hero-tagline" style={{...f(.28),fontSize:"1.1rem",color:"var(--tagline)",fontWeight:300,maxWidth:520,margin:"0 auto 2.6rem",lineHeight:1.85}}>
           Building AI-powered products that turn data into decisions people actually adopt.
         </p>
 
@@ -362,7 +580,7 @@ function Hero(){
 
       {/* Scroll indicator */}
       <div style={{position:"absolute",bottom:"2rem",left:"50%",animation:"bob 2.2s ease-in-out infinite"}}>
-        <div style={{width:22,height:34,borderRadius:11,border:"2px solid rgba(255,255,255,.22)",display:"flex",justifyContent:"center",paddingTop:7}}>
+        <div style={{width:22,height:34,borderRadius:11,border:"2px solid var(--line-strongest)",display:"flex",justifyContent:"center",paddingTop:7}}>
           <div style={{width:4,height:8,borderRadius:2,background:"var(--pk)"}}/>
         </div>
       </div>
@@ -395,7 +613,7 @@ function ExperienceSection(){
 
         {/* ── Horizontal tab bar ── */}
         <Reveal delay={.1}>
-          <div className="tab-scroll" style={{display:"flex",gap:0,marginBottom:"2rem",borderBottom:"1px solid var(--border)",overflowX:"auto",position:"relative"}}>
+          <div className="tab-scroll" style={{display:"flex",gap:0,marginBottom:"2rem",borderBottom:"1px solid var(--line)",overflowX:"auto",position:"relative"}}>
             {EXP.map((e)=>{
               const isA=active===e.id;
               return(
@@ -411,7 +629,7 @@ function ExperienceSection(){
                 >
                   <span className="tab-co" style={{fontFamily:"var(--syne)",fontSize:".95rem",fontWeight:700,color:isA?"var(--pkl)":"var(--w2)",transition:"color .25s",whiteSpace:"nowrap"}}>{e.company}</span>
                   <span className="tab-period" style={{fontSize:".64rem",color:isA?"var(--w2)":"var(--m)",letterSpacing:".04em",transition:"color .25s",whiteSpace:"nowrap",fontWeight:500}}>{e.period}</span>
-                  <span className="tab-tag" style={{fontSize:".56rem",letterSpacing:".1em",textTransform:"uppercase",padding:".15rem .55rem",borderRadius:999,background:isA?"rgba(232,99,154,.16)":"rgba(255,255,255,.05)",border:`1px solid ${isA?"rgba(232,99,154,.32)":"rgba(255,255,255,.09)"}`,color:isA?"var(--pkl)":"var(--m)",transition:"all .25s",display:"inline-block",fontWeight:600}}>{e.tag}</span>
+                  <span className="tab-tag" style={{fontSize:".56rem",letterSpacing:".1em",textTransform:"uppercase",padding:".15rem .55rem",borderRadius:999,background:isA?"var(--pk-bg)":"var(--surface)",border:`1px solid ${isA?"var(--pk-line)":"var(--line)"}`,color:isA?"var(--pkl)":"var(--m)",transition:"all .25s",display:"inline-block",fontWeight:600}}>{e.tag}</span>
                 </button>
               );
             })}
@@ -428,10 +646,10 @@ function ExperienceSection(){
                 <div className="exp-role" style={{fontSize:".9rem",color:"var(--w2)",marginBottom:".25rem",fontWeight:500}}>{exp.role}</div>
                 <div className="exp-line" style={{fontSize:".76rem",color:"var(--m)",fontStyle:"italic"}}>{exp.tagline}</div>
               </div>
-              <span className="exp-period" style={{fontSize:".72rem",color:"var(--w2)",letterSpacing:".06em",padding:".3rem .8rem",border:"1px solid var(--border)",borderRadius:6,whiteSpace:"nowrap",fontWeight:500}}>{exp.period}</span>
+              <span className="exp-period" style={{fontSize:".72rem",color:"var(--w2)",letterSpacing:".06em",padding:".3rem .8rem",border:"1px solid var(--line)",borderRadius:6,whiteSpace:"nowrap",fontWeight:500}}>{exp.period}</span>
             </div>
 
-            <div style={{height:1,background:"linear-gradient(to right,rgba(232,99,154,.36),transparent)",marginBottom:"1.7rem"}}/>
+            <div style={{height:1,background:"linear-gradient(to right,var(--pk-divider),transparent)",marginBottom:"1.7rem"}}/>
 
             {/* Bullets with bold numbers */}
             <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:".75rem",marginBottom:"1.8rem"}}>
@@ -446,7 +664,7 @@ function ExperienceSection(){
             {/* Chips */}
             <div style={{display:"flex",flexWrap:"wrap",gap:".5rem"}}>
               {exp.chips.map(c=>(
-                <span key={c} className="exp-chip" style={{fontSize:".66rem",letterSpacing:".06em",padding:".26rem .8rem",borderRadius:6,background:"rgba(155,111,212,.12)",border:"1px solid rgba(155,111,212,.26)",color:"var(--lv)",fontWeight:600}}>{c}</span>
+                <span key={c} className="exp-chip" style={{fontSize:".66rem",letterSpacing:".06em",padding:".26rem .8rem",borderRadius:6,background:"var(--lv-bg)",border:"1px solid var(--lv-line)",color:"var(--lv)",fontWeight:600}}>{c}</span>
               ))}
             </div>
           </Card>
@@ -477,7 +695,7 @@ function ProjectsSection(){
                 )}
                 <div style={{display:"flex",flexWrap:"wrap",gap:".4rem"}}>
                   {p.tags.map(t=>(
-                    <span key={t} style={{fontSize:".6rem",letterSpacing:".07em",textTransform:"uppercase",padding:".2rem .62rem",borderRadius:5,background:"rgba(232,99,154,.08)",border:"1px solid rgba(232,99,154,.22)",color:"hsl(330,82%,76%)",fontWeight:600}}>{t}</span>
+                    <span key={t} style={{fontSize:".6rem",letterSpacing:".07em",textTransform:"uppercase",padding:".2rem .62rem",borderRadius:5,background:"var(--pk-bg-subtle)",border:"1px solid var(--pk-line-subtle)",color:"var(--pk-tag)",fontWeight:600}}>{t}</span>
                   ))}
                 </div>
               </Card>
@@ -498,9 +716,9 @@ function ProjLink({label,href,primary=false}){
         display:"inline-flex",alignItems:"center",gap:".35rem",
         fontSize:".68rem",letterSpacing:".08em",textTransform:"uppercase",fontWeight:600,
         padding:".38rem .85rem",borderRadius:999,textDecoration:"none",transition:"all .22s",
-        background:primary?(h?"var(--pk)":"rgba(232,99,154,.16)"):(h?"rgba(255,255,255,.1)":"rgba(255,255,255,.05)"),
-        border:`1px solid ${primary?"rgba(232,99,154,.42)":"rgba(255,255,255,.14)"}`,
-        color:primary?(h?"#fff":"var(--pkl)"):"var(--w2)",
+        background:primary?(h?"var(--pk)":"var(--pk-bg)"):(h?"var(--surface-hover)":"var(--surface)"),
+        border:`1px solid ${primary?"var(--pk-line-strong)":"var(--line-strong)"}`,
+        color:primary?(h?"var(--on-pk)":"var(--pkl)"):"var(--w2)",
         transform:h?"translateY(-1px)":"translateY(0)",
       }}
       onMouseEnter={()=>sh(true)} onMouseLeave={()=>sh(false)}
@@ -540,8 +758,8 @@ function SkTag({children,hot=false}){
   return(
     <span className="sk-tag"
       style={{fontSize:".82rem",padding:".34rem .9rem",borderRadius:8,cursor:"default",transition:"all .2s",fontWeight:500,
-        background:hot?(h?"rgba(232,99,154,.2)":"var(--pks)"):(h?"rgba(232,99,154,.08)":"rgba(255,255,255,.045)"),
-        border:hot?`1px solid ${h?"rgba(232,99,154,.45)":"rgba(232,99,154,.28)"}`:`1px solid ${h?"rgba(232,99,154,.28)":"rgba(255,255,255,.09)"}`,
+        background:hot?(h?"var(--pk-bg-strong)":"var(--pk-bg)"):(h?"var(--pk-bg-subtle)":"var(--surface)"),
+        border:hot?`1px solid ${h?"var(--pk-line-strong)":"var(--pk-line)"}`:`1px solid ${h?"var(--pk-line)":"var(--line)"}`,
         color:hot?"var(--pkl)":(h?"var(--pkl)":"var(--w2)"),
       }}
       onMouseEnter={()=>sh(true)} onMouseLeave={()=>sh(false)}
@@ -611,7 +829,7 @@ function ContactSection(){
         </div>
 
         {/* Footer */}
-        <div className="footer-row" style={{marginTop:"5rem",paddingTop:"2rem",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:".5rem"}}>
+        <div className="footer-row" style={{marginTop:"5rem",paddingTop:"2rem",borderTop:"1px solid var(--line)",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:".5rem"}}>
           <span style={{fontFamily:"var(--syne)",fontSize:".82rem",fontWeight:700,color:"var(--pkl)"}}>Tszching (Phoebe) Wang · 2026</span>
           <span style={{fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",color:"var(--w2)",fontWeight:500}}>Chicago, IL · Open to Opportunities</span>
         </div>
@@ -624,10 +842,10 @@ function ContactRow({icon,label,val,href}){
   const[h,sh]=useState(false);
   return(
     <a href={href} target={href.startsWith("http")?"_blank":undefined} rel="noreferrer" className="ct-row"
-      style={{display:"flex",alignItems:"center",gap:"1rem",padding:"1.1rem 1.35rem",borderRadius:14,textDecoration:"none",color:"var(--w)",background:h?"rgba(232,99,154,.05)":"var(--card)",border:`1px solid ${h?"var(--bh)":"var(--border)"}`,transform:h?"translateX(4px)":"translateX(0)",transition:"all .25s"}}
+      style={{display:"flex",alignItems:"center",gap:"1rem",padding:"1.1rem 1.35rem",borderRadius:14,textDecoration:"none",color:"var(--w)",background:h?"var(--pk-bg-subtle)":"var(--card)",border:`1px solid ${h?"var(--pk-line-strong)":"var(--line)"}`,transform:h?"translateX(4px)":"translateX(0)",transition:"all .25s"}}
       onMouseEnter={()=>sh(true)} onMouseLeave={()=>sh(false)}
     >
-      <div className="ct-icon" style={{width:40,height:40,borderRadius:10,background:"var(--pks)",border:"1px solid rgba(232,99,154,.25)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:".82rem",color:"var(--pkl)",flexShrink:0,fontWeight:700,letterSpacing:".02em"}}>{icon}</div>
+      <div className="ct-icon" style={{width:40,height:40,borderRadius:10,background:"var(--pk-bg)",border:"1px solid var(--pk-line-subtle)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:".82rem",color:"var(--pkl)",flexShrink:0,fontWeight:700,letterSpacing:".02em"}}>{icon}</div>
       <div style={{minWidth:0,flex:1}}>
         <span className="ct-label" style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--m)",display:"block",marginBottom:".1rem",fontWeight:600}}>{label}</span>
         <span className="ct-val" style={{fontSize:".88rem",fontWeight:500,color:h?"var(--pkl)":"var(--w)",transition:"color .25s",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",display:"block"}}>{val}</span>
@@ -638,10 +856,11 @@ function ContactRow({icon,label,val,href}){
 
 /* ─── APP ────────────────────────────────────────────────────────────────── */
 export default function App(){
+  const[theme,toggle]=useTheme();
   return(
     <>
       <G/>
-      <Nav/>
+      <Nav theme={theme} toggle={toggle}/>
       <Hero/>
       <ExperienceSection/>
       <ProjectsSection/>
