@@ -9,10 +9,15 @@ const G = () => (
     /* 字体在 index.html 里用 <link> 加载，不在这里 @import——
        @import 要等这段 JS 注入的 <style> 生效后才开始下载，会拖慢首屏文字显示 */
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    /* button/input 默认不继承 font-family，漏了这行会让按钮里的文字掉回 Arial */
+    button,input,select,textarea{font:inherit;color:inherit;background:none;border:none}
     /* ── 字体（两个主题共用）── */
     :root{
-      --syne:'Syne',sans-serif;
-      --dm:'DM Sans',sans-serif;
+      /* 变量名沿用 --syne/--dm，免得散落各处的引用全都要改。
+         实际字体：标题 Space Grotesk（几何感但字形规整），正文 Inter（屏幕易读性最好）。
+         回退链里 -apple-system 保证字体没加载完时也是像样的无衬线。 */
+      --syne:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      --dm:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     }
 
     /* ── 深色主题（默认）──
@@ -156,43 +161,43 @@ const G = () => (
 
       .hero-section{padding:7rem 1.3rem 5rem!important;min-height:auto!important}
       .hero-avatar{width:96px!important;height:96px!important}
-      .hero-pill{font-size:.55rem!important;padding:.32rem .85rem!important;letter-spacing:.14em!important}
+      .hero-pill{font-size:.68rem!important;padding:.36rem .9rem!important;letter-spacing:.12em!important}
       .hero-name{font-size:clamp(3.2rem,16vw,4.6rem)!important;line-height:.92!important}
-      .hero-fullname{font-size:.6rem!important;letter-spacing:.13em!important;margin-bottom:1.2rem!important}
+      .hero-fullname{font-size:.74rem!important;letter-spacing:.11em!important;margin-bottom:1.2rem!important}
       .hero-tags{flex-direction:column!important;gap:.5rem!important;align-items:center!important}
-      .hero-tagline{font-size:1rem!important;max-width:none!important;margin-bottom:2rem!important}
+      .hero-tagline{font-size:1.04rem!important;max-width:none!important;margin-bottom:2rem!important}
       .hero-ctas{gap:.6rem!important;flex-direction:column!important;width:100%!important;max-width:300px!important;margin:0 auto!important}
       .hero-ctas a{width:100%!important;justify-content:center!important}
 
       .sec{padding:5rem 0!important}
       .stitle{font-size:2rem!important;margin-bottom:2rem!important}
-      .slabel{font-size:.55rem!important}
+      .slabel{font-size:.72rem!important;letter-spacing:.14em!important}
 
       .tab-btn{padding:.85rem 1.3rem .8rem!important}
-      .tab-co{font-size:.78rem!important}
-      .tab-period{font-size:.55rem!important}
-      .tab-tag{font-size:.5rem!important;padding:.12rem .45rem!important}
+      .tab-co{font-size:.88rem!important}
+      .tab-period{font-size:.7rem!important}
+      .tab-tag{font-size:.64rem!important;padding:.16rem .52rem!important}
 
       .exp-card{padding:1.6rem 1.3rem!important}
       .exp-co{font-size:1.1rem!important}
-      .exp-role{font-size:.78rem!important}
-      .exp-line{font-size:.7rem!important}
-      .exp-period{font-size:.62rem!important;padding:.22rem .6rem!important}
-      .exp-bullet{font-size:.86rem!important;line-height:1.65!important}
-      .exp-chip{font-size:.62rem!important;padding:.22rem .65rem!important}
+      .exp-role{font-size:.86rem!important}
+      .exp-line{font-size:.8rem!important}
+      .exp-period{font-size:.74rem!important;padding:.24rem .64rem!important}
+      .exp-bullet{font-size:.94rem!important;line-height:1.7!important}
+      .exp-chip{font-size:.74rem!important;padding:.26rem .7rem!important}
 
       .proj-grid,.sk-grid,.edu-grid{grid-template-columns:1fr!important;gap:1rem!important}
       .proj-card,.edu-card{padding:1.7rem 1.4rem!important}
-      .proj-title{font-size:1.02rem!important}
-      .proj-desc{font-size:.86rem!important}
-      .proj-link{font-size:.64rem!important;padding:.42rem .8rem!important}
+      .proj-title{font-size:1.1rem!important}
+      .proj-desc{font-size:.94rem!important}
+      .proj-link{font-size:.75rem!important;padding:.46rem .9rem!important}
       .sk-card{padding:1.5rem 1.4rem!important}
-      .sk-tag{font-size:.78rem!important;padding:.32rem .8rem!important}
+      .sk-tag{font-size:.85rem!important;padding:.36rem .85rem!important}
 
       .ct-h2{font-size:1.9rem!important}
       .ct-row{padding:.95rem 1.1rem!important}
-      .ct-label{font-size:.55rem!important}
-      .ct-val{font-size:.82rem!important}
+      .ct-label{font-size:.7rem!important;letter-spacing:.1em!important}
+      .ct-val{font-size:.9rem!important}
       .ct-icon{width:36px!important;height:36px!important;font-size:.75rem!important}
       .ct-buttons{flex-direction:column!important}
       .ct-buttons a{width:100%!important;justify-content:center!important}
@@ -349,7 +354,7 @@ function Reveal({children,delay=0,style={}}){
 }
 
 const SLabel=({c})=>(
-  <p className="slabel" style={{fontSize:".62rem",letterSpacing:".28em",textTransform:"uppercase",color:"var(--pk)",fontWeight:700,marginBottom:".7rem"}}>{c}</p>
+  <p className="slabel" style={{fontSize:".78rem",letterSpacing:".17em",textTransform:"uppercase",color:"var(--pk)",fontWeight:700,marginBottom:".8rem"}}>{c}</p>
 );
 const STitle=({c})=>(
   <h2 className="stitle" style={{fontFamily:"var(--syne)",fontSize:"clamp(2rem,3.6vw,2.8rem)",fontWeight:700,lineHeight:1.15,marginBottom:"3rem",letterSpacing:"-.01em"}}>
@@ -372,8 +377,8 @@ function Btn({href,download,children,variant="ghost",style={},className=""}){
   const[h,sh]=useState(false);
   const base={
     display:"inline-flex",alignItems:"center",justifyContent:"center",gap:".4rem",
-    padding:".8rem 1.7rem",borderRadius:999,fontSize:".74rem",
-    fontWeight:600,letterSpacing:".09em",textTransform:"uppercase",
+    padding:".85rem 1.75rem",borderRadius:999,fontSize:".82rem",
+    fontWeight:600,letterSpacing:".07em",textTransform:"uppercase",
     textDecoration:"none",transition:"all .25s",cursor:"pointer",
     fontFamily:"var(--dm)",border:"none",whiteSpace:"nowrap",
   };
@@ -458,7 +463,7 @@ function Nav({theme,toggle}){
             const id=l.toLowerCase(),isA=aid===id;
             return(
               <li key={l}>
-                <a href={`#${id}`} aria-current={isA?"true":undefined} style={{fontSize:".7rem",letterSpacing:".12em",textTransform:"uppercase",fontWeight:500,textDecoration:"none",color:isA?"var(--w)":"var(--w2)",borderBottom:`1px solid ${isA?"var(--pk)":"transparent"}`,paddingBottom:"3px",transition:"all .2s"}}>{l}</a>
+                <a href={`#${id}`} aria-current={isA?"true":undefined} style={{fontSize:".8rem",letterSpacing:".09em",textTransform:"uppercase",fontWeight:500,textDecoration:"none",color:isA?"var(--w)":"var(--w2)",borderBottom:`1px solid ${isA?"var(--pk)":"transparent"}`,paddingBottom:"3px",transition:"all .2s"}}>{l}</a>
               </li>
             );
           })}
@@ -541,16 +546,16 @@ function Hero(){
         {/* ── BADGES ROW ── */}
         <div className="hero-tags" style={{...f(.06),display:"flex",alignItems:"center",justifyContent:"center",gap:".7rem",flexWrap:"wrap",marginBottom:"1.8rem"}}>
           {/* Open to Work */}
-          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid var(--green-line)",background:"var(--green-bg)",backdropFilter:"blur(10px)",fontSize:".64rem",letterSpacing:".15em",textTransform:"uppercase",color:"var(--green-t)",fontWeight:600}}>
+          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid var(--green-line)",background:"var(--green-bg)",backdropFilter:"blur(10px)",fontSize:".76rem",letterSpacing:".13em",textTransform:"uppercase",color:"var(--green-t)",fontWeight:600}}>
             <span style={{width:7,height:7,borderRadius:"50%",background:"var(--green)",display:"inline-block",animation:"pulseDot 2s ease-in-out infinite"}}/>
             Open to Work
           </div>
           {/* New Grad */}
-          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid var(--pk-line)",background:"var(--pk-bg-subtle)",backdropFilter:"blur(10px)",fontSize:".64rem",letterSpacing:".15em",textTransform:"uppercase",color:"var(--pkl)",fontWeight:600}}>
+          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid var(--pk-line)",background:"var(--pk-bg-subtle)",backdropFilter:"blur(10px)",fontSize:".76rem",letterSpacing:".13em",textTransform:"uppercase",color:"var(--pkl)",fontWeight:600}}>
             ✦ New Grad · 2026
           </div>
           {/* Role */}
-          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid var(--line-strong)",background:"var(--surface)",backdropFilter:"blur(10px)",fontSize:".62rem",letterSpacing:".15em",textTransform:"uppercase",color:"var(--w2)"}}>
+          <div className="hero-pill" style={{display:"inline-flex",alignItems:"center",gap:".5rem",padding:".4rem 1rem",borderRadius:999,border:"1px solid var(--line-strong)",background:"var(--surface)",backdropFilter:"blur(10px)",fontSize:".74rem",letterSpacing:".13em",textTransform:"uppercase",color:"var(--w2)"}}>
             PM · Data · AI
           </div>
         </div>
@@ -561,12 +566,12 @@ function Hero(){
           <span style={{color:"var(--pkl)"}}>(Phoebe) Wang.</span>
         </h1>
 
-        <p className="hero-fullname" style={{...f(.2),fontSize:".74rem",letterSpacing:".18em",color:"var(--w2)",marginBottom:"1.6rem",textTransform:"uppercase",fontWeight:500}}>
+        <p className="hero-fullname" style={{...f(.2),fontSize:".84rem",letterSpacing:".15em",color:"var(--w2)",marginBottom:"1.6rem",textTransform:"uppercase",fontWeight:500}}>
           Northwestern MSIT '26 · Chicago, IL
         </p>
 
         {/* Tagline */}
-        <p className="hero-tagline" style={{...f(.28),fontSize:"1.1rem",color:"var(--tagline)",fontWeight:300,maxWidth:520,margin:"0 auto 2.6rem",lineHeight:1.85}}>
+        <p className="hero-tagline" style={{...f(.28),fontSize:"1.15rem",color:"var(--tagline)",fontWeight:400,maxWidth:520,margin:"0 auto 2.6rem",lineHeight:1.85}}>
           Building AI-powered products that turn data into decisions people actually adopt.
         </p>
 
@@ -629,7 +634,7 @@ function ExperienceSection(){
                 >
                   <span className="tab-co" style={{fontFamily:"var(--syne)",fontSize:".95rem",fontWeight:700,color:isA?"var(--pkl)":"var(--w2)",transition:"color .25s",whiteSpace:"nowrap"}}>{e.company}</span>
                   <span className="tab-period" style={{fontSize:".64rem",color:isA?"var(--w2)":"var(--m)",letterSpacing:".04em",transition:"color .25s",whiteSpace:"nowrap",fontWeight:500}}>{e.period}</span>
-                  <span className="tab-tag" style={{fontSize:".56rem",letterSpacing:".1em",textTransform:"uppercase",padding:".15rem .55rem",borderRadius:999,background:isA?"var(--pk-bg)":"var(--surface)",border:`1px solid ${isA?"var(--pk-line)":"var(--line)"}`,color:isA?"var(--pkl)":"var(--m)",transition:"all .25s",display:"inline-block",fontWeight:600}}>{e.tag}</span>
+                  <span className="tab-tag" style={{fontSize:".68rem",letterSpacing:".08em",textTransform:"uppercase",padding:".2rem .6rem",borderRadius:999,background:isA?"var(--pk-bg)":"var(--surface)",border:`1px solid ${isA?"var(--pk-line)":"var(--line)"}`,color:isA?"var(--pkl)":"var(--m)",transition:"all .25s",display:"inline-block",fontWeight:600}}>{e.tag}</span>
                 </button>
               );
             })}
@@ -654,7 +659,7 @@ function ExperienceSection(){
             {/* Bullets with bold numbers */}
             <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:".75rem",marginBottom:"1.8rem"}}>
               {exp.bullets.map((b,i)=>(
-                <li key={i} className="exp-bullet" style={{fontSize:".92rem",color:"var(--w2)",lineHeight:1.75,display:"flex",gap:".8rem",animation:`fadeUp .38s ease ${i*.05}s both`}}>
+                <li key={i} className="exp-bullet" style={{fontSize:".97rem",color:"var(--w2)",lineHeight:1.75,display:"flex",gap:".8rem",animation:`fadeUp .38s ease ${i*.05}s both`}}>
                   <span style={{color:"var(--pk)",flexShrink:0,marginTop:".15em",fontSize:".78rem"}}>▹</span>
                   <span>{renderBullet(b)}</span>
                 </li>
@@ -664,7 +669,7 @@ function ExperienceSection(){
             {/* Chips */}
             <div style={{display:"flex",flexWrap:"wrap",gap:".5rem"}}>
               {exp.chips.map(c=>(
-                <span key={c} className="exp-chip" style={{fontSize:".66rem",letterSpacing:".06em",padding:".26rem .8rem",borderRadius:6,background:"var(--lv-bg)",border:"1px solid var(--lv-line)",color:"var(--lv)",fontWeight:600}}>{c}</span>
+                <span key={c} className="exp-chip" style={{fontSize:".76rem",letterSpacing:".05em",padding:".3rem .85rem",borderRadius:6,background:"var(--lv-bg)",border:"1px solid var(--lv-line)",color:"var(--lv)",fontWeight:600}}>{c}</span>
               ))}
             </div>
           </Card>
@@ -685,9 +690,9 @@ function ProjectsSection(){
           {PROJECTS.map((p,i)=>(
             <Reveal key={p.title} delay={i*.07}>
               <Card className="proj-card" style={{padding:"2rem",height:"100%",display:"flex",flexDirection:"column"}}>
-                <p style={{fontSize:".62rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--lv)",marginBottom:".75rem",fontWeight:600}}>{p.type}</p>
+                <p style={{fontSize:".76rem",letterSpacing:".13em",textTransform:"uppercase",color:"var(--lv)",marginBottom:".8rem",fontWeight:600}}>{p.type}</p>
                 <h3 className="proj-title" style={{fontFamily:"var(--syne)",fontSize:"1.05rem",fontWeight:700,lineHeight:1.32,marginBottom:".9rem"}}>{p.title}</h3>
-                <p className="proj-desc" style={{fontSize:".87rem",color:"var(--w2)",lineHeight:1.78,flex:1,fontWeight:300,marginBottom:"1.2rem"}}>{p.desc}</p>
+                <p className="proj-desc" style={{fontSize:".95rem",color:"var(--w2)",lineHeight:1.75,flex:1,fontWeight:400,marginBottom:"1.2rem"}}>{p.desc}</p>
                 {p.links?.length>0&&(
                   <div className="proj-links" style={{display:"flex",flexWrap:"wrap",gap:".5rem",marginBottom:"1.1rem"}}>
                     {p.links.map((l,li)=><ProjLink key={l.href} {...l} primary={li===0}/>)}
@@ -695,7 +700,7 @@ function ProjectsSection(){
                 )}
                 <div style={{display:"flex",flexWrap:"wrap",gap:".4rem"}}>
                   {p.tags.map(t=>(
-                    <span key={t} style={{fontSize:".6rem",letterSpacing:".07em",textTransform:"uppercase",padding:".2rem .62rem",borderRadius:5,background:"var(--pk-bg-subtle)",border:"1px solid var(--pk-line-subtle)",color:"var(--pk-tag)",fontWeight:600}}>{t}</span>
+                    <span key={t} style={{fontSize:".72rem",letterSpacing:".06em",textTransform:"uppercase",padding:".28rem .7rem",borderRadius:5,background:"var(--pk-bg-subtle)",border:"1px solid var(--pk-line-subtle)",color:"var(--pk-tag)",fontWeight:600}}>{t}</span>
                   ))}
                 </div>
               </Card>
@@ -714,8 +719,8 @@ function ProjLink({label,href,primary=false}){
     <a href={href} target="_blank" rel="noreferrer" className="proj-link"
       style={{
         display:"inline-flex",alignItems:"center",gap:".35rem",
-        fontSize:".68rem",letterSpacing:".08em",textTransform:"uppercase",fontWeight:600,
-        padding:".38rem .85rem",borderRadius:999,textDecoration:"none",transition:"all .22s",
+        fontSize:".78rem",letterSpacing:".06em",textTransform:"uppercase",fontWeight:600,
+        padding:".44rem .95rem",borderRadius:999,textDecoration:"none",transition:"all .22s",
         background:primary?(h?"var(--pk)":"var(--pk-bg)"):(h?"var(--surface-hover)":"var(--surface)"),
         border:`1px solid ${primary?"var(--pk-line-strong)":"var(--line-strong)"}`,
         color:primary?(h?"var(--on-pk)":"var(--pkl)"):"var(--w2)",
@@ -739,7 +744,7 @@ function SkillsSection(){
           {SKILLS.map((s,i)=>(
             <Reveal key={s.label} delay={i*.07}>
               <Card className="sk-card" style={{padding:"1.8rem 2rem"}}>
-                <p style={{fontSize:".62rem",letterSpacing:".22em",textTransform:"uppercase",color:"var(--pk)",fontWeight:700,marginBottom:"1.1rem"}}>{s.label}</p>
+                <p style={{fontSize:".78rem",letterSpacing:".17em",textTransform:"uppercase",color:"var(--pk)",fontWeight:700,marginBottom:"1.1rem"}}>{s.label}</p>
                 <div style={{display:"flex",flexWrap:"wrap",gap:".5rem"}}>
                   {s.hot.map(sk=><SkTag key={sk} hot>{sk}</SkTag>)}
                   {s.normal.map(sk=><SkTag key={sk}>{sk}</SkTag>)}
@@ -781,11 +786,11 @@ function EducationSection(){
           ].map((e,i)=>(
             <Reveal key={e.school} delay={i*.1}>
               <Card className="edu-card" style={{padding:"2.2rem",height:"100%"}}>
-                <p style={{fontSize:".62rem",letterSpacing:".15em",textTransform:"uppercase",color:"var(--lv)",fontWeight:700,marginBottom:".9rem"}}>{e.period}</p>
+                <p style={{fontSize:".76rem",letterSpacing:".13em",textTransform:"uppercase",color:"var(--lv)",fontWeight:700,marginBottom:".9rem"}}>{e.period}</p>
                 <h3 style={{fontFamily:"var(--syne)",fontSize:"1.25rem",fontWeight:700,marginBottom:".35rem",letterSpacing:"-.005em"}}>{e.school}</h3>
                 <p style={{fontSize:".84rem",color:"var(--w2)",fontStyle:"italic",fontWeight:400,marginBottom:"1.15rem"}}>{e.degree}</p>
                 <div style={{width:"2rem",height:2,borderRadius:1,background:"var(--pk)",marginBottom:"1.15rem"}}/>
-                <p style={{fontSize:".86rem",color:"var(--w2)",lineHeight:1.78,fontWeight:300}}>{e.note}</p>
+                <p style={{fontSize:".94rem",color:"var(--w2)",lineHeight:1.75,fontWeight:400}}>{e.note}</p>
               </Card>
             </Reveal>
           ))}
@@ -814,7 +819,7 @@ function ContactSection(){
             <h2 className="ct-h2" style={{fontFamily:"var(--syne)",fontSize:"clamp(2rem,3.8vw,2.9rem)",fontWeight:700,lineHeight:1.1,marginBottom:"1.3rem",letterSpacing:"-.01em"}}>
               Let's Build Something <span style={{color:"var(--pk)"}}>Meaningful.</span>
             </h2>
-            <p style={{fontSize:".92rem",color:"var(--w2)",lineHeight:1.85,fontWeight:300,maxWidth:380}}>
+            <p style={{fontSize:"1rem",color:"var(--w2)",lineHeight:1.8,fontWeight:400,maxWidth:400}}>
               Open to PM, data analyst, and AI product roles — especially in tech, SaaS, or fintech. Fluent in English, Mandarin, and Cantonese.
             </p>
           </Reveal>
@@ -855,7 +860,7 @@ function ContactRow({icon,label,val,href}){
     >
       <div className="ct-icon" style={{width:40,height:40,borderRadius:10,background:"var(--pk-bg)",border:"1px solid var(--pk-line-subtle)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:".82rem",color:"var(--pkl)",flexShrink:0,fontWeight:700,letterSpacing:".02em"}}>{icon}</div>
       <div style={{minWidth:0,flex:1}}>
-        <span className="ct-label" style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--m)",display:"block",marginBottom:".1rem",fontWeight:600}}>{label}</span>
+        <span className="ct-label" style={{fontSize:".72rem",letterSpacing:".12em",textTransform:"uppercase",color:"var(--m)",display:"block",marginBottom:".1rem",fontWeight:600}}>{label}</span>
         <span className="ct-val" style={{fontSize:".88rem",fontWeight:500,color:h?"var(--pkl)":"var(--w)",transition:"color .25s",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",display:"block"}}>{val}</span>
       </div>
     </a>
