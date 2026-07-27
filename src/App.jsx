@@ -176,7 +176,7 @@ const G = () => (
       .tab-btn{padding:.85rem 1.3rem .8rem!important}
       .tab-co{font-size:.88rem!important}
       .tab-period{font-size:.7rem!important}
-      .tab-tag{font-size:.64rem!important;padding:.16rem .52rem!important}
+      .tab-tag{font-size:.72rem!important;padding:.18rem .55rem!important}
 
       .exp-card{padding:1.6rem 1.3rem!important}
       .exp-co{font-size:1.1rem!important}
